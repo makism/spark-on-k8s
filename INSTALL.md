@@ -5,33 +5,49 @@
 
 Install `minikube` and fetch the binary of `helm`.
 
+## minikube
+```bash
+minikube start --memory 8192 --cpus 4
+minikube kubectl -- get pods -A
+minikube addons enable metrics-server
+minikube dashboard
+```
+
+## Prometheus stack
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus-comm prometheus-community/kube-prometheus-stack
+```
+
+
 ## spark-operator
 
 Install the `spark-operator` from the GCP repository using `helm`:
 
 ```bash
 helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-operator
+
 ```
 
 ```bash
-helm install my-release spark-operator/spark-operator --namespace spark-operator --create-namespace --set webhook.enable=true
+helm install my-release spark-operator/spark-operator --namespace spark-operator --create-namespace --set webhook.enable=true --set sparkJobNamespace=default
 ```
 
 
 ```bash
-minikube kubectl -- create serviceaccount spark
+minikube kubectl -- create serviceaccount spark --namespace=default
 minikube kubectl -- create clusterrolebinding spark-role --clusterrole=edit --serviceaccount=default:spark --namespace=default
 ```
 
-## minio
 
-You may use the provided deployment file under `deploy/minio` or from `helm`.
-
+## Prometheus <> JMX
 ```bash
-minikube kubectl -- apply -f deploy/minio/pvc.yaml
-minikube kubectl -- apply -f deploy/minio/deployment.yaml
-minikube kubectl -- apply -f deploy/minio/service.yaml
+minikube kubectl -- apply -f deploy/prometheus/spark.yaml
+minikube kubectl -- apply -f deploy/prometheus/spark-service.yaml
+minikube kubectl -- apply -f deploy/prometheus/servicemonitor-spark.yaml
 ```
+
 
 # Submit a job
 

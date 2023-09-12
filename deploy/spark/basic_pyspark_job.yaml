@@ -3,7 +3,18 @@ kind: SparkApplication
 metadata:
   name: basic-job
   namespace: default
+  labels:
+    app: spark
 spec:
+  deps:
+    jars:
+      - https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.11.0/jmx_prometheus_javaagent-0.11.0.jar
+  monitoring:
+    exposeDriverMetrics: true
+    exposeExecutorMetrics: true
+    prometheus:
+      jmxExporterJar: "/opt/spark-jars/jmx_prometheus_javaagent-0.11.0.jar"
+      port: 8090
   type: Python
   pythonVersion: "3"
   mode: cluster

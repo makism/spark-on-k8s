@@ -9,31 +9,26 @@ Install `minikube` and fetch the binary of `helm`.
 ```bash
 minikube start --memory 8192 --cpus 4
 minikube kubectl -- get pods -A
-minikube addons enable metrics-server
 minikube dashboard
 ```
 
 ## Prometheus stack
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
 helm install prometheus-comm prometheus-community/kube-prometheus-stack
 ```
 
 
 ## spark-operator
 
-Install the `spark-operator` from the GCP repository using `helm`:
+Install the `spark-operator` from the helm chart repository:
 
 ```bash
-helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-operator
-
+helm repo add spark-operator https://kubeflow.github.io/spark-operator
+helm install spark-operator spark-operator/spark-operator \
+    --namespace spark-operator \
+    --create-namespace
 ```
-
-```bash
-helm install my-release spark-operator/spark-operator --namespace spark-operator --create-namespace --set webhook.enable=true --set sparkJobNamespace=default
-```
-
 
 ```bash
 minikube kubectl -- create serviceaccount spark --namespace=default
@@ -43,9 +38,7 @@ minikube kubectl -- create clusterrolebinding spark-role --clusterrole=edit --se
 
 ## Prometheus <> JMX
 ```bash
-minikube kubectl -- apply -f deploy/prometheus/spark.yaml
-minikube kubectl -- apply -f deploy/prometheus/spark-service.yaml
-minikube kubectl -- apply -f deploy/prometheus/servicemonitor-spark.yaml
+minikube kubectl -- apply -f deploy/prometheus/
 ```
 
 

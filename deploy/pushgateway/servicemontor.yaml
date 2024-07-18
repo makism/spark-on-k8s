@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: servicemonitor-pushgateway
+  labels:
+    release: prometheus-comm
+spec:
+  selector:
+    matchLabels:
+      app: prometheus-pushgateway
+  endpoints:
+    - port: "9091"
+
+

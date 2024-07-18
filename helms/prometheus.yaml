@@ -1,0 +1,7 @@
+prometheus:
+  prometheusSpec:
+    additionalScrapeConfigs: |
+      - job_name: spark
+        static_configs: 
+        - targets: ["prometheus-pushgateway-service:9091"]
+

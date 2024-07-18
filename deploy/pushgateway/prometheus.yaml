@@ -5,5 +5,7 @@ metadata:
 spec:
   serviceMonitorSelector:
     matchLabels:
-      app: spark
+      app: prometheus-pushgateway
   enableAdminAPI: false
+
+
